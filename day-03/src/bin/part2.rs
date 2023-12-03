@@ -57,7 +57,7 @@ fn part2(input: &str) -> usize {
             state[1][0] = m.get((x as i32 - 1) as usize);
             state[1][1] = m.get(x);
             state[1][2] = m.get(x + 1);
-            fn is_sn(c : Option<&char>) -> bool {
+            fn is_sn(c: Option<&char>) -> bool {
                 if let Some(c2) = c {
                     c2.is_ascii_digit()
                 } else {
@@ -71,20 +71,40 @@ fn part2(input: &str) -> usize {
             for y2 in 0..3 {
                 if is_sn(state[y2][0]) || is_sn(state[y2][1]) || is_sn(state[y2][2]) {
                     if is_sn(state[y2][0]) && is_sn(state[y2][2]) && !is_sn(state[y2][1]) {
-                        v.push(get_num(cma.get((newy + y2 as i64) as usize).unwrap(), x-1, cma[0].len()));
-                        v.push(get_num(cma.get((newy + y2 as i64) as usize).unwrap(), x+1, cma[0].len()));
+                        v.push(get_num(
+                            cma.get((newy + y2 as i64) as usize).unwrap(),
+                            x - 1,
+                            cma[0].len(),
+                        ));
+                        v.push(get_num(
+                            cma.get((newy + y2 as i64) as usize).unwrap(),
+                            x + 1,
+                            cma[0].len(),
+                        ));
                     } else {
                         if is_sn(state[y2][0]) {
-                            v.push(get_num(cma.get((newy + y2 as i64) as usize).unwrap(), x-1, cma[0].len()));
+                            v.push(get_num(
+                                cma.get((newy + y2 as i64) as usize).unwrap(),
+                                x - 1,
+                                cma[0].len(),
+                            ));
                         } else if is_sn(state[y2][1]) {
-                            v.push(get_num(cma.get((newy + y2 as i64) as usize).unwrap(), x, cma[0].len()));
+                            v.push(get_num(
+                                cma.get((newy + y2 as i64) as usize).unwrap(),
+                                x,
+                                cma[0].len(),
+                            ));
                         } else {
-                            v.push(get_num(cma.get((newy + y2 as i64) as usize).unwrap(), x+1, cma[0].len()));     
+                            v.push(get_num(
+                                cma.get((newy + y2 as i64) as usize).unwrap(),
+                                x + 1,
+                                cma[0].len(),
+                            ));
                         }
                     }
                 }
             }
-            
+
             dbg!(v.clone());
             if v.len() == 2 {
                 n.push(v[0] * v[1]);
