@@ -1,4 +1,4 @@
-use std::{str, collections::HashSet};
+use std::{collections::HashSet, str};
 fn main() {
     let input = include_str!("./input1.txt");
     let output = part2(input);
@@ -6,20 +6,34 @@ fn main() {
 }
 
 fn part2(input: &str) -> usize {
-    let cardwins = input.lines().map(|s| s.split(": ").nth(1).unwrap()).map(|s| {
-        let mut split = s.split(" | ");
-        (split.next().unwrap().split(" ").filter(|s| *s != "").map(|n| n.parse().unwrap()).collect(), 
-        split.next().unwrap().split(" ").filter(|s| *s != "").map(|n| n.parse().unwrap()).collect())
-    }).collect::<Vec<(HashSet<usize>, Vec<usize>)>>().into_iter().map(|c| {
-        let (win, num) = c;
-        let mut p = 0;
-        num.into_iter().for_each(|n| {
-            if win.contains(&n) {
-                p += 1
-            }
-        });
-        p
-    }).enumerate().collect::<Vec<(usize,usize)>>();
+    let cardwins = input
+        .lines()
+        .map(|s| s.split(": ").nth(1).unwrap())
+        .map(|s| {
+            let mut split = s.split(" | ").map(|s| {
+                s.split(" ")
+                    .filter(|s| *s != "")
+                    .map(|n| n.parse().unwrap())
+                    .collect::<Vec<usize>>()
+            });
+            (
+                HashSet::from_iter(split.next().unwrap().into_iter()),
+                split.next().unwrap(),
+            )
+        })
+        .collect::<Vec<(HashSet<usize>, Vec<usize>)>>()
+        .into_iter()
+        .map(|(win, num)| {
+            let mut p = 0;
+            num.into_iter().for_each(|n| {
+                if win.contains(&n) {
+                    p += 1
+                }
+            });
+            p
+        })
+        .enumerate()
+        .collect::<Vec<(usize, usize)>>();
     let mut previous: Vec<i64> = vec![-1; cardwins.len()];
     // Dynamic programming ftw
     cardwins.clone().into_iter().rev().for_each(|(i, n)| {
@@ -29,8 +43,8 @@ fn part2(input: &str) -> usize {
             if previous[ii] != -1 {
                 local += previous[ii] as usize
             } else {
-                local += cardwins[(ii+1)..(ii+1+ni)].len();
-                start.extend_from_slice(&cardwins[(ii+1)..(ii+1+ni)]);
+                local += cardwins[(ii + 1)..(ii + 1 + ni)].len();
+                start.extend_from_slice(&cardwins[(ii + 1)..(ii + 1 + ni)]);
             }
         }
         previous[i] = local as i64;
