@@ -31,32 +31,14 @@ fn part1(input: &str) -> usize {
         s1.parse().unwrap()
     }).collect();
     dbg!(v.clone());
-    let mut result = 1;
     let race_dur = v[0];
     let record = v[1];
-
-    let start = 0;
-    let end = race_dur;
-    let mut bot = 0;
-    let mut top = record;
     let mut ways = 0;
     for i in 0..race_dur {
         if beats_record(i, race_dur, record) {
             ways += 1;
         }
     }
-    // loop {
-    //     let mid = (start + end)/2;
-    //     let result = dist(race_dur, mid);
-    //     if result > record {
-    //         start = mid;
-    //     } else if result < record {
-    //         end = mid;
-    //     } else {
-    //         if mid-1 >= 0 && dist(race_dur, mid-1) != record
-    //     }
-    // }
-    // result *= ways;
     ways
 }
 
